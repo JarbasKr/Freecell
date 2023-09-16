@@ -8,12 +8,13 @@ class Card{
     public:
     // ~Carta(
     Card(int num = 0, int naipe = 0);
-    int getNum();
-    int getNaipe();
-    int getColor();
+    int GetNum();
+    int GetNaipe();
+    int GetColor();
+    bool EmptyCard();
     private:
-    int num;
-    int naipe;
+    int num = 0;
+    int naipe = 0;
     // int cor;
 };
 

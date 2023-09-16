@@ -14,10 +14,14 @@ class Deck{
     void Fill();
     void Distribute();
     bool Empty();
+    Card GetStackTop(int i, bool left);
+    Card GetFreeCell(int i);
+    void SetFreeCell(int i, Card card);
     private:
 
-    Card deck[DECK_SIZE];
-    Stack stacks[STACK_SIZE];
+    Card deck[DECK_SIZE]; // Baralho completo
+    Stack stacks[STACK_SIZE]; // Pilhas
+    Card freeCells[4]; // Free Cells
 };
 
 #endif

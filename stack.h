@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const int MaxStack = 100;
+const int MaxStack = 13;
 class Stack{
     public:
     // Stack();

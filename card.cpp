@@ -5,12 +5,16 @@ Card::Card(int novoNaipe, int novoNum){
     naipe = novoNaipe;
 };
 
-int Card::getNum(){
+int Card::GetNum(){
     return num;
 };
 
-int Card::getNaipe(){
+int Card::GetNaipe(){
     return naipe;
+};
+
+bool Card::EmptyCard(){
+    return !num || !naipe;
 };
 
 // int Carta::getCor(){
