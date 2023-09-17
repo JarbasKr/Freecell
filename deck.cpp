@@ -45,7 +45,7 @@ void Deck::Distribute() {
         do {
             t_index = rand() % 4;
             left = rand() % 2;
-        } while(stacks[t_index].Full(left));
+        } while(stacks[t_index].FullStack(left));
 
         do {
             d_index = rand() % 52;

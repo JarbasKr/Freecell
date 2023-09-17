@@ -14,6 +14,7 @@ class Stack{
     Card Position(bool left, int i);
     bool Empty(bool left);
     bool Full(bool left);
+    bool FullStack(bool left);
     private:
     int top1;
     int top2;

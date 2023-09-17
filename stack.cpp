@@ -59,14 +59,21 @@ void Stack::Pop(bool left) {
 
 bool Stack::Empty(bool left) {
     if (left) {
-        return (top1 == 0);
+        return (top1 == -1);
     }
-    return (top2 == 0);
+    return (top2 == 12);
 }
 
 bool Stack::Full(bool left) {
     if (left) {
-        return (top1 == MaxStack);
+        return (top1 == MaxStack - 1);
     }
-    return (top2 == MaxStack);
+    return (top2 == MaxStack * 2 - 1);
+}
+
+bool Stack::FullStack(bool left) {
+    if (left) {
+        return (top1 == 6);
+    }
+    return (top2 == 19);
 }
