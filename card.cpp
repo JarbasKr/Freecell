@@ -17,6 +17,8 @@ bool Card::EmptyCard(){
     return !num || !naipe;
 };
 
-// int Carta::getCor(){
-//     return cor;
-// };
+void Card::Clear(){
+    num = 0;
+    naipe = 0;
+    return;
+};

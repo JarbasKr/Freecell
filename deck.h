@@ -15,8 +15,10 @@ class Deck{
     void Distribute();
     bool Empty();
     Card GetStackTop(int i, bool left);
+    Card GetStackByPosition(bool left, int i, int p);
     Card GetFreeCell(int i);
     void SetFreeCell(int i, Card card);
+    void ShowGame();
     private:
 
     Card deck[DECK_SIZE]; // Baralho completo

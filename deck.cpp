@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <ctime>
 
 #include "deck.h"
@@ -7,8 +8,6 @@
 using namespace std;
 
 void Deck::Fill(){
-    // cout << "BARALHO:PREENCHER" << endl;
-
     // P = 1
     // E = 2
     // C = 3
@@ -18,20 +17,13 @@ void Deck::Fill(){
     for(int i = 1;i < 5;i++){
         for(int j = 1;j < 14;j++){
             Card novaCarta(i, j);
-            // cout << "BARALHO:PREENCHENDO " << i << " " << j << endl;
             deck[count] = novaCarta;
-            // cout << novaCarta.GetNum() << endl;
+            // cout << "CARTA) NAIPE: " << novaCarta.GetNaipe() << ", NUM: " << novaCarta.GetNum() << endl;
             count++;
         }
         Card freeCellEmptyCard;
         freeCells[i] = freeCellEmptyCard;
     }
-
-    // cout << "BARALHO:PREENCHIDO" << endl;
-
-    // for (int i = 0; i < 52; i++) {
-    //     cout << deck[i].GetNum() << endl;
-    // }
 };
 
 void Deck::Distribute() {
@@ -42,59 +34,45 @@ void Deck::Distribute() {
     for (int s = 0; s < STACK_SIZE; s++) {
         Stack stack;
         stacks[s] = stack;
-        // cout << s << endl;
     }
+
+    int count = 0;
 
     for (int i = 0; i < c; i++) {
-        int index;
         bool left;
+        int t_index, d_index;
 
         do {
-            index = rand() % 4;
+            t_index = rand() % 4;
             left = rand() % 2;
-        } while(stacks[index].Full(left));
+        } while(stacks[t_index].Full(left));
+
+        do {
+            d_index = rand() % 52;
+        } while(deck[d_index].EmptyCard());
         
-        stacks[index].Push(left, deck[i]);
-        // TODO: Precisa concertar a distribuição
-        // cout << "I: " << i << endl;
-        // cout << "NA: " << deck[i].GetNaipe() << endl;
-        // cout << "NU: " << deck[i].GetNum() << endl;
+        stacks[t_index].Push(left, deck[d_index]);
+        // cout << count << endl;
+        // cout << "CARTA) NAIPE: " << deck[d_index].GetNaipe() << ", NUM: " << deck[d_index].GetNum() << endl;
         // cout << endl;
+        deck[d_index].Clear();
+        // count++;
     }
 
-    // cout << "###" << endl;
-
-    // cout << stacks[0].Top(false).GetNum() << endl;
-    // cout << stacks[0].Top(false).GetNaipe() << endl;
-    // cout << endl;
-    // cout << stacks[0].Top(true).GetNum() << endl;
-    // cout << stacks[0].Top(true).GetNaipe() << endl;
-    // cout << endl;
-
-    // cout << stacks[1].Top(false).GetNum() << endl;
-    // cout << stacks[1].Top(false).GetNaipe() << endl;
-    // cout << endl;
-    // cout << stacks[1].Top(true).GetNum() << endl;
-    // cout << stacks[1].Top(true).GetNaipe() << endl;
-    // cout << endl;
-
-    // cout << stacks[2].Top(false).GetNum() << endl;
-    // cout << stacks[2].Top(false).GetNaipe() << endl;
-    // cout << endl;
-    // cout << stacks[2].Top(true).GetNum() << endl;
-    // cout << stacks[2].Top(true).GetNaipe() << endl;
-    // cout << endl;
-
-    // cout << stacks[3].Top(false).GetNum() << endl;
-    // cout << stacks[3].Top(false).GetNaipe() << endl;
-    // cout << endl;
-    // cout << stacks[3].Top(true).GetNum() << endl;
-    // cout << stacks[3].Top(true).GetNaipe() << endl;
-    // cout << endl;
+    for (int i = 0; i < 4; i++) {
+        for (int s = 0; s < 2; s++) {
+            Card top = stacks[i].Top(s);
+            cout << "TOPO " << i + 1 <<" - LADO " << s << ") NAIPE: " << top.GetNaipe() << ", NUM: " << top.GetNum() << endl;
+        }
+    }
 }
 
 Card Deck::GetStackTop(int i, bool left){
     return stacks[i].Top(left);
+};
+
+Card Deck::GetStackByPosition(bool left, int i, int p){
+    return stacks[i].Position(left, p);
 };
 
 Card Deck::GetFreeCell(int i){
@@ -104,3 +82,64 @@ Card Deck::GetFreeCell(int i){
 void Deck::SetFreeCell(int i, Card card){
     freeCells[i] = card;
 };
+
+void Deck::ShowGame() {
+    cout << "Baralho Principal" << endl;
+    cout << "--------------------------" << endl;
+
+    // P = 1 - Paus
+    // E = 2 - Espadas
+    // C = 3 - Copas
+    // O = 4 - Ouros
+
+    for (int p = 1; p < 14; p++) {
+        for (int i = 0; i < 4; i++) {
+            for(int s = 0; s < 2; s++) {
+                Card top = GetStackByPosition(s, i, p);
+                // cout << s << " " << i << " " << p << " " << endl;
+
+                if (!top.EmptyCard()) {
+                    int naipe = top.GetNaipe();
+                    int num = top.GetNum();
+
+                    string naipeS;
+                    string numS;
+
+                    std::ostringstream stream;
+                    stream << " " << num;
+
+                    switch (naipe) {
+                        case 1: naipeS = "P"; break;
+                        case 2: naipeS = "E"; break;
+                        case 3: naipeS = "C"; break;
+                        default: naipeS = "O"; break;
+                    }
+
+                    switch (num) {
+                        case 10: numS = "10"; break;
+                        case 11: numS = "JK"; break;
+                        case 12: numS = "QN"; break;
+                        case 13: numS = "KG"; break;
+                        default: numS = stream.str(); break;
+                    }
+                    cout << "[" << numS << "|" << naipeS << "]";
+                } else {
+                    cout << "[    ]";
+                }
+                cout << "     ";
+            }
+        }
+        cout << endl;
+    }
+
+    for (int x = 1; x < 9; x++) {
+        cout << "  ";
+        cout << "0" << x;
+        cout << "  ";
+        cout << "     ";
+    }
+
+
+    cout << "\n\nMovimento: ";
+}
+

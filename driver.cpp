@@ -11,22 +11,7 @@ using namespace std;
 void showInstructions() {
     // Exibição do MENU
     cout << "--------------------------------- FREE CELL ---------------------------------\n";
-
-    cout << "A movimentação das cartas segue as seguintes regras:\n"
-            << "  - Uma pilha de saída recebe cartas em ordem imediatamente crescente,\n"
-            << "    do Ás ao Rei, todas do mesmo naipe.\n"
-            << "  - Uma pilha de jogo recebe cartas com naipes de cores alternantes em\n"
-            << "    ordem imediatamente decrescente.\n"
-            << "  - Uma free cell recebe qualquer carta desde que não esteja já ocupada.\n"
-            << "  - Toda carta de uma pilha de jogo é movida de seu topo e para ele.\n\n";
-
-    cout << "Para jogar, insira o índice de onde quer tirar uma carta seguido de um espaço e o índice de onde quer colocá-la.\n"
-            << "Por exemplo, se quiser mover a carta do topo da pilha 4 para a free cell 10, insira: 4 10.\n\n"
-            << "O jogo é ganho quando todas as pilhas de saída forem preenchidas. Note que o estado inicial do jogo\n"
-            << "é aleatório, portanto talvez não haja uma solução.\n\n";
-
-    cout << "Naipes pretos: Espadas e Paus\n"
-            << "Naipes vermelhos: Ouro e Copas\n\n";
+    // TODO: Criar o menu
     
     return;
 }
@@ -65,21 +50,27 @@ void readInput(string* input, bool* isValidInput, int* origin, int* destiny) {
 Card getValue(Deck deck, int i) {
     Card invalidCard;
 
-    bool left = false;
-    int localI = (i - 1) % 2;
+    bool left = true;
+    int localI = abs(i/2);
+
+    if (i % 2 == 0) {
+        localI = abs(i/2) - 1;
+        left = false;
+    }
 
     // Pilhas principais
     if (i >= 1 && i <= 8) {
-        if (localI % 2 == 0) {
-            localI = (localI % 2) - 1;
-            left = true;
-        }
+        return deck.GetStackTop(localI, left);
+    }
+
+    // Pilhas de saída
+    if (i >= 9 && i <= 12) {
         return deck.GetStackTop(localI, left);
     }
 
     // FreeCells
-    if (i >= 9 && i <= 12) {
-        return deck.GetFreeCell(i - 9);
+    if (i >= 13 && i <= 16) {
+        return deck.GetFreeCell(i - 13);
     }
 
     return invalidCard;
@@ -87,14 +78,21 @@ Card getValue(Deck deck, int i) {
 
 bool isValidMove(Deck deck, Card card, int destiny) {
     // Movimento para as Pilhas principais
+
+    cout << "\nCarta a ser movida: " << endl;
+    cout << "NUM: " << card.GetNum() << ", NAIPE: " << card.GetNaipe() << endl << endl;
+
     if (destiny >= 1 && destiny <= 8) {
         Card destinyTopCard;
         destinyTopCard = getValue(deck, destiny);
 
-        // P = 1
-        // E = 2
-        // C = 3
-        // O = 4
+        // P = 1 - Paus
+        // E = 2 - Espadas
+        // C = 3 - Copas
+        // O = 4 - Ouros
+
+        cout << "\nÚltima carta do topo: " << endl;
+        cout << "NUM: " << destinyTopCard.GetNum() << ", NAIPE: " << destinyTopCard.GetNaipe() << endl << endl;
 
         // Deve verificar se pode ser adicionado à respectiva pilha
         if (destinyTopCard.GetNum() > card.GetNum()) {
@@ -105,7 +103,31 @@ bool isValidMove(Deck deck, Card card, int destiny) {
         }
     }
 
-    // TODO: Validação de movimento nas FreeCells
+    // Validação de movimento nas FreeCells
+    if (destiny >= 13 && destiny <= 16) {
+        Card freeCell;
+        freeCell = deck.GetFreeCell(destiny - 9);
+
+        cout << "\nÚltima carta do topo: " << endl;
+        cout << "NUM: " << freeCell.GetNum() << ", NAIPE: " << freeCell.GetNaipe() << endl << endl;
+
+        // Se for uma carta vazia, o movimento é válido
+        return freeCell.EmptyCard();
+    }
+
+    // Validação de movimento para as pilhas de saída
+    if (destiny == 0) {
+        Card lastOutCard;
+        int destinyNaipe = 8 + card.GetNaipe();
+
+        // Obtém a carta do topo da pilha de saída no respectivo naipe
+        lastOutCard = getValue(deck, destinyNaipe);
+
+        cout << "\nÚltima carta do topo: " << endl;
+        cout << "NUM: " << lastOutCard.GetNum() << ", NAIPE: " << lastOutCard.GetNaipe() << endl << endl;
+    }
+
+    return false;
 }
 
 int main() {
@@ -115,6 +137,7 @@ int main() {
     Card originCard;
 
     bool isValidInput = false;
+    bool isValid = false;
     int origin, destiny;
 
     // cout << "START" << endl;
@@ -126,9 +149,12 @@ int main() {
     deck.Distribute();
 
     // Mostra o MENU
-    showInstructions();
+    // showInstructions();
+
+    // Mostra o jogo
     
     while (true) {
+        deck.ShowGame();
         readInput(&input, &isValidInput, &origin, &destiny);
         if (isValidInput) {
             if (origin == destiny) {
@@ -137,20 +163,24 @@ int main() {
             }
 
             if (origin < 1 || origin > 12) {
-                cout << "Origem inválida!";
+                cout << "Origem inválida!" << endl;
                 continue;
             }
 
-            if (destiny < 1 || destiny > 12) {
-                cout << "Destino inválido!";
+            if (destiny < 0 || destiny > 12) {
+                cout << "Destino inválido!" << endl;
                 continue;
             }
 
-            cout << "Input Okay" << endl;
             originCard = getValue(deck, origin);
 
             if (!originCard.EmptyCard()) {
-                isValidMove(deck, originCard, destiny);
+                isValid = isValidMove(deck, originCard, destiny);
+                if (isValid) {
+                    cout << "MOVIMENTO Okay" << endl;
+                } else {
+                    cout << "Esse movimento não é válido" << endl;
+                }
             }
         }
     }
