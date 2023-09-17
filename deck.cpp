@@ -62,7 +62,7 @@ void Deck::Distribute() {
     for (int i = 0; i < 4; i++) {
         for (int s = 0; s < 2; s++) {
             Card top = stacks[i].Top(s);
-            cout << "TOPO " << i + 1 <<" - LADO " << s << ") NAIPE: " << top.GetNaipe() << ", NUM: " << top.GetNum() << endl;
+            // cout << "TOPO " << i + 1 <<" - LADO " << s << ") NAIPE: " << top.GetNaipe() << ", NUM: " << top.GetNum() << endl;
         }
     }
 }
@@ -84,13 +84,102 @@ void Deck::SetFreeCell(int i, Card card){
 };
 
 void Deck::ShowGame() {
-    cout << "Baralho Principal" << endl;
-    cout << "--------------------------" << endl;
+    cout << "Pilhas de Saida" << endl;
+    cout << "--------------------------\n" << endl;
 
     // P = 1 - Paus
     // E = 2 - Espadas
     // C = 3 - Copas
     // O = 4 - Ouros
+
+    for (int i = 0; i < 4; i++) {
+        Card freeCell;
+        freeCell = GetFreeCell(i);
+        if (!freeCell.EmptyCard()) {
+            int naipe = freeCell.GetNaipe();
+            int num = freeCell.GetNum();
+
+            string naipeS;
+            string numS;
+
+            std::ostringstream stream;
+            stream << " " << num;
+
+            switch (naipe) {
+                case 1: naipeS = "P"; break;
+                case 2: naipeS = "E"; break;
+                case 3: naipeS = "C"; break;
+                default: naipeS = "O"; break;
+            }
+
+            switch (num) {
+                case 10: numS = "10"; break;
+                case 11: numS = "JK"; break;
+                case 12: numS = "QN"; break;
+                case 13: numS = "KG"; break;
+                default: numS = stream.str(); break;
+            }
+            cout << "[" << numS << "|" << naipeS << "]";
+        } else {
+            cout << "[    ]";
+        }
+    }
+    cout << endl;
+
+    for (int x = 13; x < 17; x++) {
+        cout << "  00  ";
+    }
+    cout << endl;
+
+    cout << "\nFreeCells" << endl;
+    cout << "--------------------------\n" << endl;
+
+    // P = 1 - Paus
+    // E = 2 - Espadas
+    // C = 3 - Copas
+    // O = 4 - Ouros
+
+    for (int i = 0; i < 4; i++) {
+        Card freeCell;
+        freeCell = GetFreeCell(i);
+        if (!freeCell.EmptyCard()) {
+            int naipe = freeCell.GetNaipe();
+            int num = freeCell.GetNum();
+
+            string naipeS;
+            string numS;
+
+            std::ostringstream stream;
+            stream << " " << num;
+
+            switch (naipe) {
+                case 1: naipeS = "P"; break;
+                case 2: naipeS = "E"; break;
+                case 3: naipeS = "C"; break;
+                default: naipeS = "O"; break;
+            }
+
+            switch (num) {
+                case 10: numS = "10"; break;
+                case 11: numS = "JK"; break;
+                case 12: numS = "QN"; break;
+                case 13: numS = "KG"; break;
+                default: numS = stream.str(); break;
+            }
+            cout << "[" << numS << "|" << naipeS << "]";
+        } else {
+            cout << "[    ]";
+        }
+    }
+    cout << endl;
+
+    for (int x = 13; x < 17; x++) {
+        cout << "  " << x << "  ";
+    }
+    cout << endl;
+
+    cout << "\nBaralho Principal" << endl;
+    cout << "--------------------------\n" << endl;
 
     for (int p = 1; p < 14; p++) {
         for (int i = 0; i < 4; i++) {
@@ -138,7 +227,6 @@ void Deck::ShowGame() {
         cout << "  ";
         cout << "     ";
     }
-
 
     cout << "\n\nMovimento: ";
 }
