@@ -62,13 +62,21 @@ void Deck::Distribute() {
     for (int i = 0; i < 4; i++) {
         for (int s = 0; s < 2; s++) {
             Card top = stacks[i].Top(s);
-            // cout << "TOPO " << i + 1 <<" - LADO " << s << ") NAIPE: " << top.GetNaipe() << ", NUM: " << top.GetNum() << endl;
+            cout << "TOPO " << i + 1 <<" - LADO " << s << ") NAIPE: " << top.GetNaipe() << ", NUM: " << top.GetNum() << endl;
         }
     }
 }
 
-Card Deck::GetStackTop(int i, bool left){
+void Deck::PushToStack(bool left, int i, Card card){
+    stacks[i].Push(left, card);
+};
+
+Card Deck::GetStackTop(bool left, int i){
     return stacks[i].Top(left);
+};
+
+void Deck::RemoveStackTop(bool left, int i){
+    stacks[i].Pop(left);
 };
 
 Card Deck::GetStackByPosition(bool left, int i, int p){
@@ -86,11 +94,6 @@ void Deck::SetFreeCell(int i, Card card){
 void Deck::ShowGame() {
     cout << "Pilhas de Saida" << endl;
     cout << "--------------------------\n" << endl;
-
-    // P = 1 - Paus
-    // E = 2 - Espadas
-    // C = 3 - Copas
-    // O = 4 - Ouros
 
     for (int i = 0; i < 4; i++) {
         Card freeCell;
@@ -184,8 +187,12 @@ void Deck::ShowGame() {
     for (int p = 1; p < 14; p++) {
         for (int i = 0; i < 4; i++) {
             for(int s = 0; s < 2; s++) {
-                Card top = GetStackByPosition(s, i, p);
-                // cout << s << " " << i << " " << p << " " << endl;
+                Card top;
+                if (s == 0) {
+                    top = GetStackByPosition(true, i, p);
+                } else {
+                    top = GetStackByPosition(false, i, p);
+                }
 
                 if (!top.EmptyCard()) {
                     int naipe = top.GetNaipe();

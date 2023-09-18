@@ -9,12 +9,11 @@ const int STACK_SIZE = 6;
 
 class Deck{
     public:
-    // Baralho();
-    // ~Baralho();
     void Fill();
     void Distribute();
-    bool Empty();
-    Card GetStackTop(int i, bool left);
+    void PushToStack(bool left, int i, Card card);
+    Card GetStackTop(bool left, int i);
+    void RemoveStackTop(bool left, int i);
     Card GetStackByPosition(bool left, int i, int p);
     Card GetFreeCell(int i);
     void SetFreeCell(int i, Card card);
