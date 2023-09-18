@@ -5,7 +5,7 @@
 #include "stack.h"
 
 const int DECK_SIZE = 52;
-const int STACK_SIZE = 6;
+const int STACK_SIZE = 4;
 
 class Deck{
     public:
@@ -17,11 +17,14 @@ class Deck{
     Card GetStackByPosition(bool left, int i, int p);
     Card GetFreeCell(int i);
     void SetFreeCell(int i, Card card);
+    Card GetStackOut(int i);
+    void SetStackOut(int i, Card card);
     void ShowGame();
     private:
 
     Card deck[DECK_SIZE]; // Baralho completo
     Stack stacks[STACK_SIZE]; // Pilhas
+    Card stacksOut[4]; // Pilhas de saída
     Card freeCells[4]; // Free Cells
 };
 

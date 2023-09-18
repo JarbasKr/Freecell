@@ -18,11 +18,11 @@ void Deck::Fill(){
         for(int j = 1;j < 14;j++){
             Card novaCarta(i, j);
             deck[count] = novaCarta;
-            // cout << "CARTA) NAIPE: " << novaCarta.GetNaipe() << ", NUM: " << novaCarta.GetNum() << endl;
             count++;
         }
-        Card freeCellEmptyCard;
-        freeCells[i] = freeCellEmptyCard;
+        Card empty;
+        freeCells[i] = empty;
+        stacksOut[i] = empty;
     }
 };
 
@@ -52,11 +52,7 @@ void Deck::Distribute() {
         } while(deck[d_index].EmptyCard());
         
         stacks[t_index].Push(left, deck[d_index]);
-        // cout << count << endl;
-        // cout << "CARTA) NAIPE: " << deck[d_index].GetNaipe() << ", NUM: " << deck[d_index].GetNum() << endl;
-        // cout << endl;
         deck[d_index].Clear();
-        // count++;
     }
 
     for (int i = 0; i < 4; i++) {
@@ -91,16 +87,24 @@ void Deck::SetFreeCell(int i, Card card){
     freeCells[i] = card;
 };
 
+Card Deck::GetStackOut(int i){
+    return stacksOut[i];
+};
+
+void Deck::SetStackOut(int i, Card card){
+    stacksOut[i] = card;
+};
+
 void Deck::ShowGame() {
     cout << "Pilhas de Saida" << endl;
     cout << "--------------------------\n" << endl;
 
     for (int i = 0; i < 4; i++) {
-        Card freeCell;
-        freeCell = GetFreeCell(i);
-        if (!freeCell.EmptyCard()) {
-            int naipe = freeCell.GetNaipe();
-            int num = freeCell.GetNum();
+        Card stackOutValue;
+        stackOutValue = GetStackOut(i);
+        if (!stackOutValue.EmptyCard()) {
+            int naipe = stackOutValue.GetNaipe();
+            int num = stackOutValue.GetNum();
 
             string naipeS;
             string numS;
@@ -127,6 +131,7 @@ void Deck::ShowGame() {
             cout << "[    ]";
         }
     }
+
     cout << endl;
 
     for (int x = 13; x < 17; x++) {
@@ -237,4 +242,3 @@ void Deck::ShowGame() {
 
     cout << "\n\nMovimento: ";
 }
-

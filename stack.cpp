@@ -51,12 +51,10 @@ void Stack::Pop(bool left) {
     }
 
     if (left) {
-        top1 = top1 - 1;
+        top1--;
         return;
     }
-    top2 = top2 - 1;
-    entry[top2] = entry[top2];
-    // top2--;
+    top2--;
 }
 
 bool Stack::Empty(bool left) {

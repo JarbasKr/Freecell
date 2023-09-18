@@ -79,9 +79,6 @@ Card getValue(Deck deck, int i) {
 bool isValidMove(Deck deck, Card card, int destiny) {
     // Movimento para as Pilhas principais
 
-    // cout << "\nCarta a ser movida: " << endl;
-    // cout << "NUM: " << card.GetNum() << ", NAIPE: " << card.GetNaipe() << endl << endl;
-
     if (destiny >= 1 && destiny <= 8) {
         Card destinyTopCard;
         destinyTopCard = getValue(deck, destiny);
@@ -91,11 +88,8 @@ bool isValidMove(Deck deck, Card card, int destiny) {
         // C = 3 - Copas
         // O = 4 - Ouros
 
-        // cout << "\nÚltima carta do topo: " << endl;
-        // cout << "NUM: " << destinyTopCard.GetNum() << ", NAIPE: " << destinyTopCard.GetNaipe() << endl << endl;
-
         // Deve verificar se pode ser adicionado à respectiva pilha
-        if (destinyTopCard.GetNum() > card.GetNum()) {
+        if (destinyTopCard.GetNum() == card.GetNum() + 1) {
             if (destinyTopCard.GetNaipe() <= 2) {
                 if (card.GetNaipe() >= 3) {
                     return true;
@@ -117,9 +111,6 @@ bool isValidMove(Deck deck, Card card, int destiny) {
         Card freeCell;
         freeCell = deck.GetFreeCell(destiny - 13);
 
-        // cout << "\nÚltima carta do topo: " << endl;
-        // cout << "NUM: " << freeCell.GetNum() << ", NAIPE: " << freeCell.GetNaipe() << endl << endl;
-
         // Se for uma carta vazia, o movimento é válido
         return freeCell.EmptyCard();
     }
@@ -127,72 +118,62 @@ bool isValidMove(Deck deck, Card card, int destiny) {
     // Validação de movimento para as pilhas de saída
     if (destiny == 0) {
         Card lastOutCard;
-        int destinyNaipe = 8 + card.GetNaipe();
+        lastOutCard = deck.GetStackOut(card.GetNaipe() - 1);
 
-        // Obtém a carta do topo da pilha de saída no respectivo naipe
-        lastOutCard = getValue(deck, destinyNaipe);
+        if (lastOutCard.EmptyCard()) {
+            return card.GetNum() == 1;
+        }
 
-        cout << "\nÚltima carta do topo: " << endl;
-        cout << "NUM: " << lastOutCard.GetNum() << ", NAIPE: " << lastOutCard.GetNaipe() << endl << endl;
+        if (lastOutCard.GetNum() + 1 == lastOutCard.GetNum()) {
+            return true;
+        }
     }
 
     return false;
 }
 
-void move(Deck deck, Card card, int origin, int destiny) {
+void move(Deck &deck, Card card, int origin, int destiny) {
     cout << "CARTA A SER MOVIDA) NUM: " << card.GetNum() << ", NAIPE: " << card.GetNaipe() << endl << endl;
     bool left = true;
-    int originI = abs(origin/2);
-    int destinyI = abs(destiny/2);
+    int originI = origin/2;
+    int destinyI = destiny/2;
 
     // REMOÇÃO
 
-    // Card cardToRemove;
-    // Card cardToAdd;
-    Card cardNewOriginTop;
-
     if (origin % 2 == 0) {
-        originI = abs(origin/2) - 1;
+        originI = origin/2 - 1;
         left = false;
     }
 
-    // cardToRemove = getValue(deck, origin);
-    // cout << "REMOVER) NUM: " << cardToRemove.GetNum() << ", NAIPE: " << cardToRemove.GetNaipe() << endl << endl;
-
-    // cout << "CARTA DE ORIGEM) NUM: " << card.GetNum() << ", NAIPE: " << card.GetNaipe() << endl << endl;
-
     if (origin >= 1 && origin <= 8) {
-        // cout << "Remoção:" << endl;
-        // cout << originI << endl;
-        // cout << left << endl;
         deck.RemoveStackTop(left, originI);
-        cardNewOriginTop = deck.GetStackTop(left, originI);
-        cout << "NOVA CARTA DO TOPO NA ORIGEM) NUM: " << cardNewOriginTop.GetNum() << ", NAIPE: " << cardNewOriginTop.GetNaipe() << endl << endl;
     }
 
-    // if (origin >= 13 && origin <= 16) {
-    //     Card empty;
-    //     deck.SetFreeCell(origin - 13, empty);
-    // }
+    if (origin >= 13 && origin <= 16) {
+        Card empty;
+        deck.SetFreeCell(origin - 13, empty);
+    }
 
-    // cardToAdd = getValue(deck, destiny);
-    // cout << "ADICIONAR DEPOIS DE) NUM: " << cardToAdd.GetNum() << ", NAIPE: " << cardToAdd.GetNaipe() << endl << endl;
+    // ADIÇÃO
+    left = true;
 
-    // // ADIÇÃO
-    // left = true;
+    if (destiny % 2 == 0) {
+        destinyI = destiny/2 - 1;
+        left = false;
+    }
 
-    // if (destiny % 2 == 0) {
-    //     destinyI = abs(destiny/2) - 1;
-    //     left = false;
-    // }
+    if (destiny >= 1 && destiny <= 8) {
+        deck.PushToStack(left, destinyI, card);
+    }
 
-    // if (destiny >= 1 && destiny <= 8) {
-    //     deck.PushToStack(left, destinyI, card);
-    // }
+    if (destiny >= 13 && destiny <= 16) {
+        deck.SetFreeCell(destiny - 13, card);
+    }
 
-    // if (destiny >= 13 && destiny <= 16) {
-    //     deck.SetFreeCell(destiny - 13, card);
-    // }
+    if (destiny == 0) {
+        int i = card.GetNaipe() - 1;
+        deck.SetStackOut(i, card);
+    }
 }
 
 int main() {
@@ -248,7 +229,7 @@ int main() {
         }
     }
 
-    cout << "Parabens, tú venceu miserável" << endl;
+    cout << "Parabens, voce venceu" << endl;
 
     return 0;
 }
