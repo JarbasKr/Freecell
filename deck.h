@@ -20,6 +20,7 @@ class Deck{
     Card GetStackOut(int i);
     void SetStackOut(int i, Card card);
     void ShowGame();
+    bool IsEndGame();
     private:
 
     Card deck[DECK_SIZE]; // Baralho completo

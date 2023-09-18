@@ -9,7 +9,6 @@ class Card{
     Card(int naipe = 0, int num = 0);
     int GetNum();
     int GetNaipe();
-    int GetColor();
     bool EmptyCard();
     void Clear();
     private:

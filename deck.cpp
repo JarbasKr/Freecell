@@ -37,6 +37,8 @@ void Deck::Distribute() {
     }
 
     int count = 0;
+    int size = 7;
+    int size_count = 0;
 
     for (int i = 0; i < c; i++) {
         bool left;
@@ -45,7 +47,7 @@ void Deck::Distribute() {
         do {
             t_index = rand() % 4;
             left = rand() % 2;
-        } while(stacks[t_index].FullStack(left));
+        } while(stacks[t_index].Size(left) >= size);
 
         do {
             d_index = rand() % 52;
@@ -53,12 +55,17 @@ void Deck::Distribute() {
         
         stacks[t_index].Push(left, deck[d_index]);
         deck[d_index].Clear();
+
+        if(stacks[t_index].Size(left) == size) {
+            size_count++;
+
+            if (size_count == 4) size--;
+        }
     }
 
     for (int i = 0; i < 4; i++) {
         for (int s = 0; s < 2; s++) {
             Card top = stacks[i].Top(s);
-            cout << "TOPO " << i + 1 <<" - LADO " << s << ") NAIPE: " << top.GetNaipe() << ", NUM: " << top.GetNum() << endl;
         }
     }
 }
@@ -241,4 +248,17 @@ void Deck::ShowGame() {
     }
 
     cout << "\n\nMovimento: ";
+}
+
+bool Deck::IsEndGame() {
+    int sum = 0;
+    for (int i = 0; i < 4; i++) {
+        Card card;
+        card = stacksOut[i];
+        if (!card.EmptyCard()) {
+            sum += card.GetNum();
+        }
+    }
+
+    return sum == MaxStack * 4;
 }

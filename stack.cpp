@@ -71,9 +71,9 @@ bool Stack::Full(bool left) {
     return (top2 == MaxStack * 2 - 1);
 }
 
-bool Stack::FullStack(bool left) {
+int Stack::Size(bool left) {
     if (left) {
-        return (top1 == 6);
+        return top1 + 1;
     }
-    return (top2 == 19);
+    return top2 - 12;
 }

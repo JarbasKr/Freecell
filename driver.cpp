@@ -12,6 +12,17 @@ void showInstructions() {
     // Exibição do MENU
     cout << "--------------------------------- FREE CELL ---------------------------------\n";
     // TODO: Criar o menu
+    cout << "Fabrício Luiz da Silva - 2158382" << endl;
+    cout << "Jarbas Frederico Krempel - 2119729" << endl;
+    cout << "Joshua Lorenzo de Souza - 2158087" << endl;
+
+    cout << "FreeCell é um jogo de cartas com um total de 52 cartas de um baralho, com números de 1 a 10, com os palhaços(dama, valete, rei), com os naipes, paus, espadas, ouro e copas." << endl;
+    cout << "O jogo contem com 8 pilhas onde 4 dessas pilhas existe 7 cartas e outras 4 pilhas com 6, essas cartas serão distribuídas aleatoriamente para o jogador e ele só irá movimentar cartas que estão no topo." << endl;
+    cout << "Com isso tem a pilha de saída, as quais são o objetivo do jogo, o jogador terá que mover as cartas da pilha do jogo para a pilha de saída, as quais começam vazias." << endl;
+    cout << " para o auxilio do jog existe as FreeCells onde sao 4 posições auxiliares vazias onde pode deixar uma carta temporariamente, cada FreeCells pode colocar 1 carta." << endl;
+    cout << "O jogador pode movimentar as cartas de pilha a pilha que quiser mas existe algumas regras, por exemplo, uma FreeCell livre pode ser usada de uma carta da pilha do jogo." << endl;
+    cout << " As pilhas de saída podem ser usadas por uma de jogo e de FreeCells mas sempre respeitando a ordem do menor para o maior sempre do mesmo naipe." << endl;
+    cout << "O Ás pode ser movimentado para uma pilha de saide vazia, uma pilha de jogo pode ser usada por outra pilha de jogo ou de uma freeCell, ela deve ser movimentada do maior para o menor, alterando a cor dos naipes" << endl;
     
     return;
 }
@@ -100,9 +111,6 @@ bool isValidMove(Deck deck, Card card, int destiny) {
                     return true;
                 }
             }
-            cout << "\nERRO: Os naipes são da mesma cor!" << endl;
-        } else {
-            cout << "\nERRO: O valor da carta na pilha de destino é maior que o da origem!" << endl;
         }
     }
 
@@ -133,7 +141,6 @@ bool isValidMove(Deck deck, Card card, int destiny) {
 }
 
 void move(Deck &deck, Card card, int origin, int destiny) {
-    cout << "CARTA A SER MOVIDA) NUM: " << card.GetNum() << ", NAIPE: " << card.GetNaipe() << endl << endl;
     bool left = true;
     int originI = origin/2;
     int destinyI = destiny/2;
@@ -194,8 +201,8 @@ int main() {
 
     // Mostra o MENU
     showInstructions();
-    
-    while (true) {
+
+    while (!deck.IsEndGame()) {
         deck.ShowGame();
         readInput(&input, &isValidInput, &origin, &destiny);
         if (isValidInput) {
@@ -220,16 +227,15 @@ int main() {
             if (!originCard.EmptyCard()) {
                 isValid = isValidMove(deck, originCard, destiny);
                 if (isValid) {
-                    cout << "MOVIMENTO Okay" << endl;
                     move(deck, originCard, origin, destiny);
                 } else {
-                    cout << "Resumindo: MOVIMENTO INVALIDO!\n" << endl;
+                    cout << "ERRO: MOVIMENTO INVALIDO!\n" << endl;
                 }
             }
         }
     }
 
-    cout << "Parabens, voce venceu" << endl;
+    cout << "Parabens, você venceu!" << endl;
 
     return 0;
 }
